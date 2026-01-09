@@ -1,0 +1,112 @@
+model:
+  name: "Air Quality Prediction & Analysis Model"
+  version: "1.0"
+  last_update: "2025-01-01"
+  description: >
+    Modèle d'analyse et/ou de prédiction basé sur le Global Air Pollution Dataset.
+    Il permet d'estimer l'AQI global ou par polluant, de classifier les villes
+    selon les catégories AQI, et d'identifier les polluants dominants. Ce modèle
+    est destiné à des usages exploratoires, pédagogiques ou analytiques.
+
+  developers:
+    - name: "Alexis C."
+      role: "Data Analyst"
+      affiliation: "Projet personnel / EPSI"
+      contact: "Non spécifié"
+
+  intended_use:
+    primary:
+      - Analyse exploratoire de la pollution atmosphérique
+      - Prédiction de l'AQI global (régression)
+      - Classification des catégories AQI (classification)
+      - Visualisation et dashboards environnementaux
+    secondary:
+      - Études comparatives entre pays ou régions
+      - Détection des polluants dominants
+    out_of_scope:
+      - Décisions réglementaires
+      - Évaluations sanitaires officielles
+      - Prévisions industrielles ou météorologiques
+      - Décisions critiques (santé, urbanisme, sécurité)
+
+  training_data:
+    dataset_name: "Global Air Pollution Dataset"
+    source: "Kaggle"
+    description: >
+      Données de qualité de l’air comprenant AQI global et AQI par polluant
+      (CO, Ozone, NO2, PM2.5) pour différentes villes du monde.
+    limitations:
+      - Absence de données temporelles
+      - Méthodes de mesure hétérogènes selon les pays
+      - Représentation inégale des villes
+      - AQI dépendant des normes locales
+    preprocessing:
+      - Nettoyage des colonnes
+      - Harmonisation des catégories AQI
+      - Encodage des variables catégorielles
+      - Vérification des valeurs extrêmes
+
+  model_details:
+    type: "Régression ou Classification (selon la tâche)"
+    possible_algorithms:
+      - Random Forest
+      - Gradient Boosting
+      - XGBoost
+      - Régression linéaire
+      - Réseau neuronal simple
+    hyperparameters_example:
+      n_estimators: 200
+      max_depth: 10
+      learning_rate: 0.05
+
+  evaluation:
+    metrics_regression:
+      - RMSE
+      - MAE
+      - R2
+    metrics_classification:
+      - Accuracy
+      - F1-score
+      - Matrice de confusion
+    validation_strategy:
+      - train_test_split: "80/20"
+      - cross_validation: "k=5"
+
+  ethical_considerations:
+    potential_biases:
+      - Sous-représentation de certaines régions
+      - Différences de normes AQI entre pays
+      - Absence de données temporelles
+    risks:
+      - Mauvaise interprétation des prédictions
+      - Comparaisons injustes entre pays
+      - Usage dans des contextes réglementaires non adaptés
+    mitigation:
+      - Ajouter des données temporelles
+      - Ajouter des données météorologiques
+      - Documenter les limites du dataset
+
+  recommendations:
+    best_practices:
+      - Toujours contextualiser les prédictions
+      - Utiliser le modèle pour l’exploration, pas pour la régulation
+      - Combiner avec d’autres sources (OMS, EPA)
+    future_improvements:
+      - Intégration de données géographiques (lat/lon)
+      - Ajout de données météo
+      - Enrichissement avec données industrielles ou trafic
+
+  example_usage:
+    python_regression: |
+      prediction = model.predict(df_sample)
+      print("AQI estimé :", prediction)
+
+    python_classification: |
+      category = model.predict(df_sample)
+      print("Catégorie AQI :", category)
+
+  documentation:
+    related_files:
+      - "datacard_ac.yaml"
+      - "README.md"
+      - "analyse_projet.ipynb"
