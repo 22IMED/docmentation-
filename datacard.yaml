@@ -1,0 +1,145 @@
+nom_dataset: Global Air Pollution Dataset
+version: "1.1"
+derniere_mise_a_jour: trimestrielle
+
+resume_dataset:
+  description: >
+    Dataset mondial fournissant des indicateurs de qualité de l’air (AQI)
+    par ville et par polluant (CO, O3, NO2, PM2.5).
+  type_tache: Analyse exploratoire des données
+  domaine: Environnement / Pollution de l’air
+  format: CSV
+  taille_mb: 1.63
+  nombre_lignes: 23463
+  nombre_variables: 12
+
+structure_donnees:
+  variables_detaillees:
+
+    - nom: Country
+      type: catégorielle
+      valeurs_uniques: 200+
+      valeurs_manquantes: 0
+      description: Nom du pays
+
+    - nom: City
+      type: catégorielle
+      valeurs_uniques: 18000+
+      valeurs_manquantes: 0
+      description: Nom de la ville
+
+    - nom: AQI Value
+      type: numérique
+      min: 6
+      max: 500
+      moyenne: ~75
+      valeurs_manquantes: 0
+      description: Indice global de qualité de l’air
+
+    - nom: AQI Category
+      type: catégorielle
+      categories:
+        - Good
+        - Moderate
+        - Unhealthy
+        - Very Unhealthy
+        - Hazardous
+      valeurs_manquantes: 0
+      distribution:
+        Good: 42%
+        Moderate: 39%
+        Autres: 19%
+
+    - nom: CO AQI Value
+      type: numérique
+      min: 0
+      max: 133
+      moyenne: ~3
+      valeurs_manquantes: 0
+      description: AQI du monoxyde de carbone
+
+    - nom: CO AQI Category
+      type: catégorielle
+      categories:
+        - Good
+        - Moderate
+      valeurs_manquantes: 0
+      distribution:
+        Good: 100%
+        Moderate: <1%
+
+    - nom: Ozone AQI Value
+      type: numérique
+      min: 0
+      max: 235
+      moyenne: ~35
+      valeurs_manquantes: 0
+      description: AQI de l’ozone
+
+    - nom: Ozone AQI Category
+      type: catégorielle
+      valeurs_manquantes: 0
+
+    - nom: NO2 AQI Value
+      type: numérique
+      min: 0
+      max: 91
+      moyenne: ~8
+      valeurs_manquantes: 0
+      description: AQI du dioxyde d’azote
+
+    - nom: NO2 AQI Category
+      type: catégorielle
+      valeurs_manquantes: 0
+
+    - nom: PM2.5 AQI Value
+      type: numérique
+      min: 6
+      max: 500
+      moyenne: ~80
+      valeurs_manquantes: 0
+      description: AQI des particules fines PM2.5
+
+    - nom: PM2.5 AQI Category
+      type: catégorielle
+      valeurs_manquantes: 0
+
+qualite_donnees:
+  valeurs_manquantes_globales: 0
+  pourcentage_manquant: 0.0
+  doublons:
+    presence: possible
+    description: >
+      Certaines villes peuvent apparaître plusieurs fois dans des pays différents.
+  desequilibre_classes:
+    description: >
+      Les catégories AQI sont déséquilibrées avec une majorité de classes Good et Moderate.
+
+pretraitement:
+  operations_realisees:
+    - Vérification des valeurs manquantes
+    - Vérification des types de données
+    - Sélection des variables numériques
+    - Aucun nettoyage lourd nécessaire
+
+analyse_correlation:
+  variables_utilisees:
+    - AQI Value
+    - CO AQI Value
+    - Ozone AQI Value
+    - NO2 AQI Value
+    - PM2.5 AQI Value
+  resultat_cle:
+    - Forte corrélation entre AQI Value et PM2.5 AQI Value
+    - Corrélations faibles à modérées avec CO et Ozone
+
+limitations:
+  - Données statiques (pas de dimension temporelle)
+  - AQI agrégé sans exposition individuelle
+  - Données environnementales uniquement
+
+usage_prevu:
+  usage_principal: Projet académique / pédagogique
+  hors_perimetre:
+    - Diagnostic médical
+    - Décision réglementaire
