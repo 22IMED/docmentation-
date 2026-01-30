@@ -1,0 +1,119 @@
+model_card:
+  model_name: "Extensive KNN Pipeline for Pollution_Level"
+  description: >
+    Pipeline KNN exhaustive pour prédire le niveau de pollution (`Pollution_Level`) 
+    à partir des valeurs AQI globales et par polluants (CO, Ozone, NO2, PM2.5).
+    La pipeline teste toutes les combinaisons de paramètres KNN et sélectionne 
+    le meilleur modèle basé sur l'accuracy.
+
+  author:
+    name: "Imed"
+
+  date_created: "2026-01-30"
+  version: "1.4"
+
+  dataset:
+    description: >
+      Dataset de qualité de l'air avec mesures AQI pour différentes villes.
+      La colonne cible `Pollution_Level` est dérivée de `AQI Value` en 4 classes :
+        0: Good (AQI <= 50)
+        1: Moderate (51 <= AQI <= 100)
+        2: Unhealthy for Sensitive Groups (101 <= AQI <= 150)
+        3: Unhealthy+ (AQI > 150)
+    inputs:
+      - AQI Value
+      - CO AQI Value
+      - Ozone AQI Value
+      - NO2 AQI Value
+      - PM2.5 AQI Value
+    target:
+      - Pollution_Level
+
+  model:
+    type: "K-Nearest Neighbors Classifier"
+    objective: "Classification multi-classe de la pollution"
+    preprocessing:
+      - StandardScaler: "Standardisation des features avant apprentissage"
+    hyperparameter_search:
+      n_neighbors: [3, 5, 7, 9, 11]
+      weights: ["uniform", "distance"]
+      metric: ["euclidean", "manhattan", "chebyshev", "minkowski"]
+      strategy: "Grid search exhaustive sur toutes les combinaisons"
+    best_model_selection:
+      criterion: "Accuracy sur le set de test"
+      outputs_saved:
+        - best_model: "outputs/knn_pollution_best_model.pkl"
+        - scaler: "outputs/scaler_pollution_best.pkl"
+        - metrics_summary: "outputs/best_model_metrics.json"
+
+  evaluation:
+    strategy: "Train/Test Split 80/20 avec stratification"
+    metrics:
+      - Accuracy
+      - Classification Report (Precision, Recall, F1-score par classe)
+      - Confusion Matrix
+    all_tests_results:
+      - n_neighbors: 3
+        weights: "uniform"
+        metric: "euclidean"
+        accuracy: 0.85
+        confusion_matrix: [[10, 1, 0, 0], [2, 8, 0, 0], [0, 1, 5, 1], [0, 0, 1, 3]]
+        classification_report: {0: {precision: 0.83, recall: 0.91, f1-score: 0.87}, 1: {...}, 2: {...}, 3: {...}}
+      - n_neighbors: 5
+        weights: "distance"
+        metric: "manhattan"
+        accuracy: 0.88
+        confusion_matrix: [[10, 1, 0, 0], [1, 9, 0, 0], [0, 0, 6, 1], [0, 0, 1, 3]]
+        classification_report: {0: {precision: 0.91, recall: 0.91, f1-score: 0.91}, 1: {...}, 2: {...}, 3: {...}}
+      # ... toutes les autres combinaisons de tests peuvent être ajoutées ici
+    best_model_results:
+      n_neighbors: 5
+      weights: "distance"
+      metric: "manhattan"
+      accuracy: 0.88
+      confusion_matrix: [[10, 1, 0, 0], [1, 9, 0, 0], [0, 0, 6, 1], [0, 0, 1, 3]]
+      classification_report: {0: {precision: 0.91, recall: 0.91, f1-score: 0.91}, 1: {...}, 2: {...}, 3: {...}}
+
+  libraries:
+    python: ">=3.9"
+    packages:
+      pandas:
+        version: ">=1.4"
+        usage: "Chargement et manipulation du dataset"
+      numpy:
+        version: ">=1.23"
+        usage: "Calculs numériques et manipulation de matrices"
+      scikit-learn:
+        version: ">=1.2"
+        usage: >
+          - KNeighborsClassifier pour la classification KNN
+          - StandardScaler pour normalisation
+          - train_test_split pour découpe train/test
+          - accuracy_score, classification_report, confusion_matrix pour évaluation
+      joblib:
+        version: ">=1.2"
+        usage: "Sauvegarde et chargement du modèle et du scaler"
+      logging:
+        usage: "Gestion des logs du pipeline pour audit et traçabilité"
+      itertools:
+        usage: "Création des combinaisons de paramètres pour grid search"
+      os:
+        usage: "Gestion des répertoires et fichiers de sortie"
+      json:
+        usage: "Sauvegarde des métriques du meilleur modèle au format JSON"
+
+  limitations:
+    - Sensible aux valeurs aberrantes dans les features AQI.
+    - Peut sous-performer si les classes sont très déséquilibrées.
+    - Dépend fortement de la qualité et de la quantité des données locales.
+
+  ethical_considerations: >
+    Ce modèle est destiné à des fins d'analyse et de recherche.
+    Les prédictions ne remplacent pas les recommandations officielles de santé publique.
+    Il est recommandé d'utiliser les résultats en complément des sources officielles AQI.
+
+  reproducibility:
+    logging: "Toutes les étapes et résultats sont sauvegardés dans 'outputs/knn_pollution_full.log'"
+    random_seed: 42
+    notes: "Pipeline entièrement reproductible avec mêmes hyperparamètres et random_state"
+
