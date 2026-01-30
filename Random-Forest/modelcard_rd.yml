@@ -1,0 +1,95 @@
+model_card:
+  name: "AQI Category Classification Models"
+  version: "1.0"
+  description: >
+    Model card décrivant deux modèles de classification supervisée
+    (Random Forest et KNN) utilisés pour prédire la catégorie de qualité
+    de l’air (AQI Category) à partir du Global Air Pollution Dataset.
+
+  authors:
+    - "Alexis"
+
+  intended_use:
+    primary_objective: "Prédire la catégorie AQI (qualité de l’air)."
+    target_variable: "AQI Category"
+    classes:
+      - "Good"
+      - "Moderate"
+      - "Unhealthy for Sensitive Groups"
+      - "Unhealthy"
+      - "Very Unhealthy"
+    use_cases:
+      - "Surveillance environnementale"
+      - "Détection précoce des zones à risque"
+      - "Support aux politiques publiques"
+      - "Analyse exploratoire"
+    out_of_scope:
+      - "Décisions médicales"
+      - "Usage réglementaire sans validation"
+      - "Prédictions critiques en temps réel"
+
+  dataset:
+    name: "Global Air Pollution Dataset"
+    source: "Kaggle"
+    preprocessing:
+      - "Suppression des lignes sans AQI Category"
+      - "Standardisation des variables numériques"
+      - "Encodage OneHot des variables catégorielles"
+      - "Split 80/20 stratifié"
+    features:
+      numeric: "Valeurs AQI par polluant (CO, NO2, Ozone, PM2.5, PM10, etc.)"
+      categorical: ["Country", "City"]
+      target: "AQI Category"
+
+  models:
+    random_forest:
+      type: "RandomForestClassifier"
+      hyperparameters:
+        n_estimators: 400
+        max_depth: null
+        random_state: 42
+        n_jobs: -1
+      strengths:
+        - "Robuste au bruit"
+        - "Gère bien les données mixtes"
+        - "Bonne performance globale"
+        - "Interprétable via feature importance"
+      weaknesses:
+        - "Modèle plus lourd"
+        - "Moins performant si classes très déséquilibrées"
+
+  evaluation:
+    metrics:
+      - "Accuracy"
+      - "F1-macro"
+      - "Classification report"
+    results:
+      random_forest:
+        accuracy: 0.92
+        f1_macro: 0.90
+        notes: "Très bonne généralisation."
+     
+  ethical_considerations:
+    - "Biais géographiques possibles."
+    - "Dépendance à la qualité des données sources."
+    - "Ne doit pas être utilisé pour des décisions critiques sans supervision humaine."
+
+  limitations:
+    - "Dataset non exhaustif géographiquement."
+    - "Pas de prise en compte de la météo ou saisonnalité."
+    - "Classes rares potentiellement mal prédites."
+    - "KNN inefficace sur grands volumes."
+
+  recommendations:
+    - "Utiliser Random Forest comme modèle principal."
+    - "Ajouter une calibration des probabilités si utilisé pour des alertes."
+    - "Tester XGBoost ou LightGBM pour une version plus performante."
+    - "Intégrer des données météorologiques."
+
+  versioning:
+    dataset_version: "1.0"
+    random_forest_version: "1.0"
+
+  contact:
+    team: "Équipe Data/ML"
+    maintainer: "Alexis"
