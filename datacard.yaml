@@ -4,8 +4,10 @@ derniere_mise_a_jour: trimestrielle
 
 resume_dataset:
   description: >
-    Dataset mondial fournissant des indicateurs de qualité de l’air (AQI)
-    par ville et par polluant (CO, O3, NO2, PM2.5).
+    Modèle d'analyse et/ou de prédiction basé sur le Global Air Pollution Dataset.
+    Il permet d'estimer l'AQI global ou par polluant, de classifier les villes
+    selon les catégories AQI, et d'identifier les polluants dominants. Ce modèle
+    est destiné à des usages exploratoires, pédagogiques ou analytiques.
   type_tache: Analyse exploratoire des données
   domaine: Environnement / Pollution de l’air
   format: CSV
