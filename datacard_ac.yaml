@@ -1,0 +1,152 @@
+dataset:
+  name: "Global Air Pollution Dataset"
+  version: "1.0"
+  last_update: "2025-01-01"
+  description: >
+    Dataset contenant des mesures de qualité de l’air (AQI global et par polluant)
+    pour différentes villes du monde. Inclut les indices AQI pour CO, Ozone, NO2
+    et PM2.5, ainsi que leurs catégories qualitatives. Ce dataset permet des
+    analyses environnementales, comparatives et exploratoires à l’échelle mondiale.
+
+  source:
+    provider: "Kaggle"
+    url: "https://www.kaggle.com/datasets/hasibalmuzdadid/global-air-pollution-dataset"
+    license: "À vérifier selon la source d'origine"
+    geographic_scope: "Global"
+    temporal_scope: "Non spécifié"
+    collection_method: >
+      Données issues de stations de mesure nationales et internationales, agrégées
+      par ville. AQI calculé selon les standards EPA ou équivalents.
+
+  files:
+    - name: "global air pollution dataset.csv"
+      format: "csv"
+      encoding: "utf-8"
+      delimiter: ","
+      size: "inconnu"
+      rows: "inconnu"
+      columns_count: 12
+
+  schema:
+    columns:
+      - name: Country
+        type: string
+        description: Pays où la mesure a été effectuée
+        example: "France"
+
+      - name: City
+        type: string
+        description: Ville concernée
+        example: "Punaauia"
+
+      - name: AQI Value
+        type: integer
+        description: AQI global
+        example: 51
+        constraints:
+          min: 0
+          max: 500
+
+      - name: AQI Category
+        type: string
+        description: Catégorie qualitative de l’AQI global
+        allowed_values: ["Good", "Moderate", "Unhealthy", "Very Unhealthy", "Hazardous"]
+
+      - name: CO AQI Value
+        type: integer
+        description: AQI pour le monoxyde de carbone (CO)
+        example: 1
+
+      - name: CO AQI Category
+        type: string
+        description: Catégorie qualitative CO
+
+      - name: Ozone AQI Value
+        type: integer
+        description: AQI pour l’ozone (O3)
+
+      - name: Ozone AQI Category
+        type: string
+        description: Catégorie qualitative Ozone
+
+      - name: NO2 AQI Value
+        type: integer
+        description: AQI pour le dioxyde d’azote (NO2)
+
+      - name: NO2 AQI Category
+        type: string
+        description: Catégorie qualitative NO2
+
+      - name: PM2.5 AQI Value
+        type: integer
+        description: AQI pour les particules fines PM2.5
+
+      - name: PM2.5 AQI Category
+        type: string
+        description: Catégorie qualitative PM2.5
+
+  quality_assessment:
+    missing_values: "Aucune valeur manquante visible dans l'échantillon"
+    duplicates: "Non évalué"
+    outliers: "Potentiels extrêmes dans AQI Value"
+    consistency: "Catégories AQI standardisées"
+    notes: >
+      Les méthodes de mesure peuvent varier selon les pays, ce qui peut affecter
+      la comparabilité des données.
+
+  limitations:
+    - Absence de données temporelles
+    - Méthodes de mesure différentes selon les pays
+    - Représentation inégale des villes
+    - AQI global dépendant des normes locales
+
+  recommended_uses:
+    - Visualisation de la pollution mondiale
+    - Comparaison entre pays ou régions
+    - Analyse des polluants dominants
+    - Création de dashboards environnementaux
+    - Études exploratoires en data science
+
+  not_recommended_uses:
+    - Modélisation temporelle (pas de dates)
+    - Analyse fine des sources de pollution (pas de données industrielles)
+    - Études réglementaires nécessitant des mesures certifiées
+
+  visualizations:
+    description: >
+      Le dataset permet de produire des graphiques utiles pour comprendre la
+      distribution des polluants, comparer les villes et analyser les catégories AQI.
+    examples:
+      - title: "Distribution de l'AQI global"
+        type: "histogram"
+        code_python: |
+          import seaborn as sns
+          import matplotlib.pyplot as plt
+          sns.histplot(df['AQI Value'], bins=30)
+          plt.title("Distribution de l'AQI global")
+          plt.show()
+
+      - title: "Comparaison des polluants par pays"
+        type: "barplot"
+        code_python: |
+          df_grouped = df.groupby('Country')[['CO AQI Value','Ozone AQI Value','NO2 AQI Value','PM2.5 AQI Value']].mean()
+          df_grouped.plot(kind='bar', figsize=(12,6))
+          plt.title("Pollution moyenne par pays")
+          plt.show()
+
+      - title: "Heatmap de corrélation"
+        type: "heatmap"
+        code_python: |
+          import seaborn as sns
+          sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+
+  example_code:
+    python: |
+      import pandas as pd
+      df = pd.read_csv("global air pollution dataset.csv")
+      df.head()
+
+  maintainers:
+    - name: "Alexis C."
+      role: "Data Analyst"
+      contact: "Non spécifié"
